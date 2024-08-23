@@ -1,0 +1,63 @@
+.register-page {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: 
+    linear-gradient(to right, #c6ffdd, #a39678, #b07274), /* Existing gradient background */
+    url('../../public/images/login-background.webp'); /* Background image */
+  background-size: cover; /* Ensure the image covers the entire page */
+  background-position: center; /* Center the background image */
+  background-blend-mode: overlay; /* Blend the gradient and image */
+}
+
+.register-form {
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 20px;
+  width: 30%;
+  border-radius: 10px; /* Rounded corners for the form */
+}
+
+.register-form h2 {
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: #b87333;
+}
+
+.register-form a {
+  color: #b87333 !important;
+}
+
+.register-form a:hover {
+  color: black !important;
+}
+
+.register-form button {
+  background-color: #b87333;
+  color: white;
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners for the button */
+  padding: 10px; /* Add padding for the button */
+  font-size: 1rem; /* Adjust font size */
+  width: 100%; /* Make button width responsive */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+.register-form button:hover {
+  background-color: black;
+  color: white;
+}
+
+.register-form input:focus {
+  border: 1px solid #b87333 !important;
+  color: #b87333;
+}
+
+/* Additional media queries for responsiveness */
+@media (max-width: 768px) {
+  .register-form {
+    width: 80%; /* Increase form width on smaller screens */
+  }
+}

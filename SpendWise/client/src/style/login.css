@@ -1,0 +1,87 @@
+/* Overall page styling */
+.login-page {
+  height: 100vh !important; /* Ensure the page covers the full viewport height */
+  width: 100vw !important;  /* Ensure the page covers the full viewport width */
+  display: flex;
+  align-items: center;      /* Center content vertically */
+  justify-content: center;  /* Center content horizontally */
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; /* Add subtle shadow for depth */
+  background-image: url('../../public/images/login-background.webp'); /* Background image */
+  background-size: cover;   /* Make the background cover the entire div */
+  background-position: center; /* Center the background image */
+  position: relative;
+  overflow: hidden; /* Prevent scrolling if the background is larger than the viewport */
+  padding: 20px;
+}
+
+/* Form styling */
+.login-form {
+  background-color: rgba(178, 83, 83, 0.9); /* Semi-transparent background */
+  padding: 30px;
+  border-radius: 10px; /* Rounded corners for the form */
+  border: 2px solid #344265; /* Add border with color and width */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for the form */
+  width: 100%;
+  max-width: 400px; /* Limit form width to prevent stretching */
+  margin: auto;
+}
+
+/* Heading styling */
+.login-form h1 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #344265;
+  font-size: 1.8rem; /* Adjust heading size for readability */
+}
+
+/* Label styling */
+.login-form .ant-form-item-label label {
+  color: #344265 !important;
+  font-weight: 600; /* Enhance the label's weight for visibility */
+}
+
+/* Button styling */
+.login-form button {
+  background-color: #344265;
+  color: white;
+  outline: none;
+  border: none;
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+  width: 100%; /* Make button width responsive */
+  padding: 10px; /* Add padding for button */
+  font-size: 1rem; /* Adjust font size */
+  border-radius: 5px; /* Rounded corners for buttons */
+}
+
+.login-form button:hover {
+  background-color: black;
+  color: white;
+  cursor: pointer; /* Change cursor on hover */
+}
+
+/* Link styling */
+.login-form a {
+  color: #344265 !important;
+  text-decoration: none; /* Remove underline */
+  transition: color 0.3s ease; /* Smooth transition on hover */
+}
+
+.login-form a:hover {
+  color: black !important;
+}
+
+/* Additional media queries for responsiveness */
+@media (max-width: 768px) {
+  .login-form {
+    padding: 20px; /* Reduce padding on smaller screens */
+  }
+
+  .login-form h1 {
+    font-size: 1.5rem; /* Reduce heading size on smaller screens */
+  }
+
+  .login-form button {
+    font-size: 0.9rem; /* Adjust button font size */
+  }
+}
