@@ -5,6 +5,8 @@ import axios from "axios";
 import Spinner from '../components/Spinner';
 import "../style/register.css"
 
+const apiUrl ='https://spend-wise-xi.vercel.app';
+
 const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -13,7 +15,7 @@ const Register = () => {
   const submitHandler = async (values) => {
     try {
       setLoading(true);
-      await axios.post('/users/register', values);
+      await axios.post('${apiUrl}/api/v1/users/register', values);
       message.success('Registration Succesfull');
       setLoading(false);
       navigate('/login');
