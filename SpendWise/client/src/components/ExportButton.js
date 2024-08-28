@@ -1,10 +1,12 @@
 import React from "react";
 
+const apiUrl ='https://spend-wise-xi.vercel.app';
+
 const ExportButton = ({ frequency, selectedDate, type }) => {
   const handleExport = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
-      const response = await fetch("/transections/export-expenses", {
+      const response = await fetch(`${apiUrl}/api/v1/transections/export-expenses`, {
         method: "POST", // Use POST to send body data
         headers: {
           "Content-Type": "application/json",
