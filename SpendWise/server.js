@@ -18,8 +18,9 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors());
 
-
-
+app.get("/", (req, res) => {
+    res.json("This is SpendWise server")
+})
 //routes
 
 //user routes
