@@ -18,11 +18,11 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors());
 
-app.use(cors({
-  origin: 'https://spend-wise-frontend.vercel.app', 
-  methods: 'GET,POST,PUT,DELETE,OPTIONS',
-  allowedHeaders: 'Content-Type,Authorization'
-}));
+// app.use(cors({
+//   origin: 'https://spend-wise-frontend.vercel.app', 
+//   methods: 'GET,POST,PUT,DELETE,OPTIONS',
+//   allowedHeaders: 'Content-Type,Authorization'
+// }));
 
 app.get("/", (req, res) => {
     res.json("This is SpendWise server")
