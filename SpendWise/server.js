@@ -20,6 +20,8 @@ app.use(cors());
 
 app.use(cors({
   origin: 'https://spend-wise-frontend.vercel.app'
+  methods:["POST", "GET"],
+  credentials:true
 }));
 
 app.get("/", (req, res) => {
