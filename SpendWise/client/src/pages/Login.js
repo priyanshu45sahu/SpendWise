@@ -5,6 +5,8 @@ import axios from "axios";
 import Spinner from '../components/Spinner';
 import "../style/login.css";
 
+const apiUrl ='https://spend-wise-backend.vercel.app';
+
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
