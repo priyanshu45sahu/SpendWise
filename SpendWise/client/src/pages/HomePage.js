@@ -68,7 +68,7 @@ const HomePage = () => {
       try {
         const user = JSON.parse(localStorage.getItem("user"));
         setLoading(true);
-        const res = await axios.post(`${apiUrl}/api/v1/transections/get-transection`, {
+        const res = await axios.post(`/transections/get-transection`, {
           userid: user._id,
           frequency,
           selectedDate,
