@@ -1,6 +1,6 @@
 import React from 'react';
 
-const apiUrl ='https://spend-wise-xi.vercel.app';
+const apiUrl = 'https://spend-wise-xi.vercel.app';
 
 const ExportButton = ({ frequency, selectedDate, type }) => {
   const handleExport = async () => {
@@ -20,7 +20,7 @@ const ExportButton = ({ frequency, selectedDate, type }) => {
       };
 
       // Make the POST request to the export API
-      const response = await fetch(`${apiUrl}/api/v1/transections/export-expenses`, {
+      const response = await fetch(`{apiUrl}/api/v1/transections/export-expenses`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
