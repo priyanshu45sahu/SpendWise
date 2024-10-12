@@ -18,7 +18,7 @@ const ExportButton = ({ frequency, selectedDate, type }) => {
         selectedDate: selectedDate ? selectedDate.map(date => date.format("YYYY-MM-DD")) : [],
         type,
       };
-
+      console.log(requestData);
       // Make the POST request to the export API
       const response = await fetch(`${apiUrl}/api/v1/transections/export-expenses`, {
         method: "POST",
