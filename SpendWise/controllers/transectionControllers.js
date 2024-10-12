@@ -87,7 +87,7 @@ const makeDoc = async (req, res) => {
 
     // Fetch filtered data from MongoDB
     const expenses = await transectionModel.find(query);
-    console.log('Expenses fetched:', expenses);  // Log the data fetched
+    console.log('Expenses fetched:', expenses);
 
     if (!expenses.length) {
       return res.status(404).send('No transactions found');
@@ -118,21 +118,25 @@ const makeDoc = async (req, res) => {
 
     // Send file to client
     const filePath = path.join(__dirname, '..', 'expenses.csv');
-    console.log('File path:', filePath);  // Log file path
+    console.log('File path:', filePath);
 
-    res.download(filePath, 'expenses.csv', (err) => {
+    res.download(filePath, 'expenses.csv', async (err) => {
       if (err) {
-        console.log('Download error:', err);  // Log download error
+        console.log('Download error:', err);
         res.status(500).send('Error downloading the file');
       } else {
-        // Optional: Delete the file after download
-        fs.unlinkSync(filePath);
-        console.log('File deleted after download');
+        // Delete the file asynchronously after download
+        try {
+          await fs.promises.unlink(filePath);
+          console.log('File deleted after download');
+        } catch (deleteErr) {
+          console.error('Error deleting file:', deleteErr);
+        }
       }
     });
 
   } catch (err) {
-    console.log('Error:', err);  // Log any error encountered
+    console.log('Error:', err);
     res.status(500).send('Error exporting data');
   }
 };

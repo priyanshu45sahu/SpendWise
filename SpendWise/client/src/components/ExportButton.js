@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const apiUrl = 'https://spend-wise-xi.vercel.app';
 
 const ExportButton = ({ frequency, selectedDate, type }) => {
+  const [loading, setLoading] = useState(false); // For loading state
+
   const handleExport = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -19,6 +21,9 @@ const ExportButton = ({ frequency, selectedDate, type }) => {
         type,
       };
       console.log(requestData);
+
+      setLoading(true); // Set loading state
+
       // Make the POST request to the export API
       const response = await fetch(`${apiUrl}/api/v1/transections/export-expenses`, {
         method: "POST",
@@ -27,6 +32,8 @@ const ExportButton = ({ frequency, selectedDate, type }) => {
         },
         body: JSON.stringify(requestData),
       });
+
+      setLoading(false); // Reset loading state
 
       if (response.ok) {
         // Create a URL for the file and trigger download
@@ -38,16 +45,19 @@ const ExportButton = ({ frequency, selectedDate, type }) => {
         link.click();
         link.remove();
       } else {
-        alert("Error exporting data");
+        const errorMessage = await response.text(); // Get error message from the response
+        alert(`Error exporting data: ${errorMessage}`);
       }
     } catch (err) {
+      setLoading(false); // Reset loading state
+      console.error('Export error:', err); // Log error for debugging
       alert("Error exporting data");
     }
   };
 
   return (
-    <button className="btn btn-primary" onClick={handleExport}>
-      Export Selected Expenses
+    <button className="btn btn-primary" onClick={handleExport} disabled={loading}>
+      {loading ? 'Exporting...' : 'Export Selected Expenses'}
     </button>
   );
 };
