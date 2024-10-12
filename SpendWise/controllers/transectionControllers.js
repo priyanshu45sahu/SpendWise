@@ -65,7 +65,6 @@ const addTransection = async (req, res) => {
 
 const makeDoc = async (req, res) => {
   try {
-    // Extract filters from the request body
     const { frequency, selectedDate, type } = req.body;
 
     // Build the query object based on filters
@@ -78,20 +77,25 @@ const makeDoc = async (req, res) => {
         }
         : {
           date: {
-            $gte: moment(selectedDate[0]).startOf('day').toDate(),  // Use moment to ensure correct date format
-            $lte: moment(selectedDate[1]).endOf('day').toDate(),    // Use moment to ensure correct date format
+            $gte: moment(selectedDate[0]).startOf('day').toDate(),
+            $lte: moment(selectedDate[1]).endOf('day').toDate(),
           },
         }),
-      ...(type !== "all" && { type }),  // If type is not "all", filter by type
-      userid: req.body.userid,  // Ensure only the current user's transactions are fetched
+      ...(type !== "all" && { type }),
+      userid: req.body.userid,
     };
 
     // Fetch filtered data from MongoDB
     const expenses = await transectionModel.find(query);
+    console.log('Expenses fetched:', expenses);  // Log the data fetched
+
+    if (!expenses.length) {
+      return res.status(404).send('No transactions found');
+    }
 
     // Map data for CSV
     const records = expenses.map(expense => ({
-      date: moment(expense.date).format('YYYY-MM-DD'), // Ensure date is formatted correctly
+      date: moment(expense.date).format('YYYY-MM-DD'),
       amount: expense.amount,
       category: expense.category,
       description: expense.description,
@@ -110,25 +114,28 @@ const makeDoc = async (req, res) => {
 
     // Write data to CSV
     await csvWriter.writeRecords(records);
+    console.log('CSV file written successfully');
 
     // Send file to client
     const filePath = path.join(__dirname, '..', 'expenses.csv');
+    console.log('File path:', filePath);  // Log file path
+
     res.download(filePath, 'expenses.csv', (err) => {
       if (err) {
-        console.log(err);
+        console.log('Download error:', err);  // Log download error
         res.status(500).send('Error downloading the file');
       } else {
         // Optional: Delete the file after download
         fs.unlinkSync(filePath);
+        console.log('File deleted after download');
       }
     });
 
   } catch (err) {
-    console.log(err);
+    console.log('Error:', err);  // Log any error encountered
     res.status(500).send('Error exporting data');
   }
 };
-
 
 
 module.exports = { getAllTransection, addTransection, editTransection, deleteTransection, makeDoc };
