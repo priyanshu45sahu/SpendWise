@@ -3,7 +3,7 @@ const moment = require("moment");
 const { createObjectCsvWriter } = require('csv-writer');
 const fs = require('fs');
 const path = require('path');
-
+const { Parser } = require('json2csv');
 
 const getAllTransection = async (req, res) => {
   try {
@@ -65,29 +65,24 @@ const addTransection = async (req, res) => {
 
 const makeDoc = async (req, res) => {
   try {
-    const { frequency, selectedDate, type } = req.body;
+    const { frequency, selectedDate, type, userid } = req.body;
 
-    // Build the query object based on filters
     const query = {
       ...(frequency !== "custom"
-        ? {
-          date: {
-            $gt: moment().subtract(Number(frequency), "d").toDate(),
-          },
-        }
-        : {
-          date: {
-            $gte: moment(selectedDate[0]).startOf('day').toDate(),
-            $lte: moment(selectedDate[1]).endOf('day').toDate(),
-          },
-        }),
+        ? { date: { $gt: moment().subtract(Number(frequency), "d").toDate() } }
+        : { date: { $gte: moment(selectedDate[0]).startOf('day').toDate(), $lte: moment(selectedDate[1]).endOf('day').toDate() } }),
       ...(type !== "all" && { type }),
-      userid: req.body.userid,
+      userid,
     };
 
-    // Fetch filtered data from MongoDB
-    const expenses = await transectionModel.find(query);
-    console.log('Expenses fetched:', expenses);
+    let expenses;
+    try {
+      expenses = await transectionModel.find(query);
+      console.log('Fetched expenses:', expenses);
+    } catch (dbError) {
+      console.error('Database query error:', dbError);
+      return res.status(500).send('Database query error');
+    }
 
     if (!expenses.length) {
       return res.status(404).send('No transactions found');
@@ -101,43 +96,19 @@ const makeDoc = async (req, res) => {
       description: expense.description,
     }));
 
-    // Define CSV writer
-    const csvWriter = createObjectCsvWriter({
-      path: 'expenses.csv',
-      header: [
-        { id: 'date', title: 'Date' },
-        { id: 'amount', title: 'Amount' },
-        { id: 'category', title: 'Category' },
-        { id: 'description', title: 'Description' },
-      ],
-    });
+    // Convert JSON data to CSV
+    const json2csvParser = new Parser();
+    const csvData = json2csvParser.parse(records);
 
-    // Write data to CSV
-    await csvWriter.writeRecords(records);
-    console.log('CSV file written successfully');
+    // Set response headers for file download
+    res.setHeader('Content-disposition', 'attachment; filename=expenses.csv');
+    res.set('Content-Type', 'text/csv');
 
-    // Send file to client
-    const filePath = path.join(__dirname, '..', 'expenses.csv');
-    console.log('File path:', filePath);
-
-    res.download(filePath, 'expenses.csv', async (err) => {
-      if (err) {
-        console.log('Download error:', err);
-        res.status(500).send('Error downloading the file');
-      } else {
-        // Delete the file asynchronously after download
-        try {
-          await fs.promises.unlink(filePath);
-          console.log('File deleted after download');
-        } catch (deleteErr) {
-          console.error('Error deleting file:', deleteErr);
-        }
-      }
-    });
-
+    // Send CSV data as the response
+    res.status(200).send(csvData);
   } catch (err) {
-    console.log('Error:', err);
-    res.status(500).send('Error exporting data');
+    console.error('Error in makeDoc:', err);
+    return res.status(500).send('Error exporting data');
   }
 };
 
